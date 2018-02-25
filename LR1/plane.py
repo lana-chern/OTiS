@@ -3,17 +3,17 @@ import math
 
 
 def intersection_with_plane(n, r0, p0, e):
-    temp = scalar_multipl(n, e)
-    if temp == 0:
+    t = scalar_multipl(n, e)
+    if t == 0:
         if scalar_multipl(n, diff(r0, p0)) == 0:
             print("Луч принадлежит плоскости")
         else:
             print("Луч параллелен плоскости")
-    # TODO check of intersection in other case
-    # elif temp < 0:
-    #     print("Луч не пересекает плоскость")
+    t = scalar_multipl(n, diff(r0, p0)) / scalar_multipl(n, e) / t
+    if t < 0:
+        print("Луч не пересекает плоскость")
     else:
-        return scalar_multipl(n, diff(r0, p0)) / scalar_multipl(n, e)
+        return t
 
 
 def refraction_after_plane(n_refr, e, n):

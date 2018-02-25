@@ -9,13 +9,18 @@ def intersection_with_sphere(r0, R, p0, e):
     else:
         t1 = (scalar_multipl(diff(r0, p0), e)) - math.sqrt(temp)
         t2 = (scalar_multipl(diff(r0, p0), e)) + math.sqrt(temp)
-    return [t1, t2]
+    if t1 < 0:
+        return t2
+    elif t2 < 0:
+        return t1
+    else:
+        return min(t1, t2)
 
 
 def normal(r0, e, p0, t):
-    a = diff(sum(r0, multipl(t[0], e)), p0)
-    b = diff(sum(r0, multipl(t[1], e)), p0)
-    n = [multipl(1 / math.sqrt(scalar_multipl(a, a)), a), multipl(1 / math.sqrt(scalar_multipl(b, b)), b)]
+    temp = diff(sum(r0, multipl(t, e)), p0)
+    n = multipl(1 / math.sqrt(scalar_multipl(temp, temp)), temp)
+    n = norm(n)
     return n
 
 
