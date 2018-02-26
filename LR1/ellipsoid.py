@@ -9,15 +9,20 @@ def intersection_with_ellipsoid(r0, e, p0, a_el, b_el):
     b = 2 * scalar_multipl(temp1, temp2)
     c = scalar_multipl(temp2, temp2) - pow(a_el*b_el, 2)
     D = b * b - 4 * a * c
-    t1 = (- b + sqrt(D)) / 2 * a
-    t2 = (- b - sqrt(D)) / 2 * a
-    # TODO check from intersection
-    if t1 < 0:
-        return t2
-    elif t2 < 0:
-        return t1
+    if D < 0:
+        print('Луч не пересекает эллипс')
     else:
-        return min(t1, t2)
+        t1 = (- b - sqrt(D)) / 2 * a
+        t2 = (- b + sqrt(D)) / 2 * a
+        if t1 < 0:
+            if t2 < 0:
+                print('Луч не пересекает эллипс')
+            else:
+                return t2
+        elif t2 < 0:
+            return t1
+        else:
+            return min(t1, t2)
 
 
 def normal(r0, e, p0, t):

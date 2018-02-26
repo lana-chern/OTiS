@@ -78,15 +78,16 @@ def check_ellipsoid():
 
     p0_refl_e = sum(p0, multipl(t_e, e))
     n_e = normal(p0, e, el, t_e)
-    print(n_e)
+    print('normal ', n_e)
     e_refl_e = reflection_from_ellipsoid(e, n_e)
-    print(e_refl_e)
+    print('e_refl_e', e_refl_e)
     p0_refr_e = p0_refl_e
     e_refr_e = refraction_after_ellipsoid(n_r, e, n_e)
+    print('e_refr_e', e_refr_e)
     plot_ellipsoid(el, a, b)
     plot_ray(p0, e, t_e)
     plot_ray(p0_refl_e, e_refl_e, t_e)
-    plot_ray(p0_refr_e, e_refr_e, R)
+    plot_ray(p0_refr_e, e_refr_e, t_e)
 
 
 if __name__ == '__main__':
@@ -98,8 +99,8 @@ if __name__ == '__main__':
     # n = [float(input('xn: ')), float(input('yn: ')), float(input('zn: '))]
 
     # Параметры вектора:
-    p0 = [2, 2]
-    e = [1, 0]
+    p0 = [3, 2]
+    e = [0, 1]
 
     # Параметры плоскости и сред
     r0 = [4, 2]
@@ -116,7 +117,7 @@ if __name__ == '__main__':
 
     # Параметры эллипса
     a = 2
-    b = 1
+    b = 3
     el = [2, 2]
 
     check_ellipsoid()

@@ -29,9 +29,11 @@ def refraction_after_sphere(n_refr, e, n):
         1 - math.pow(n_refr[0] / n_refr[1], 2) * (1 - math.pow(scalar_multipl(e, n), 2))),
                                                  multipl(sign(scalar_multipl(e, n)), n)))
     e_refr = multipl(1 / n_refr[1], e_refr)
+    e_refr = norm(e_refr)
     return e_refr
 
 
 def reflection_from_sphere(e, n):
     e_refl = diff(e, multipl(2 * scalar_multipl(e, n), n))
+    e_refl = norm(e_refl)
     return e_refl
