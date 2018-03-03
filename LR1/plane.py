@@ -9,7 +9,7 @@ def intersection_with_plane(n, r0, p0, e):
             print("Луч принадлежит плоскости")
         else:
             print("Луч параллелен плоскости")
-    t = scalar_multipl(n, diff(r0, p0)) / scalar_multipl(n, e) / t
+    t = scalar_multipl(n, diff(r0, p0)) / t
     if t < 0:
         print("Луч не пересекает плоскость")
     else:

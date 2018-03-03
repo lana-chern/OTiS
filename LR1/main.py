@@ -17,11 +17,10 @@ def plot_ellipsoid(p0, a, b):
     pl.plot(a * np.cos(i) + p0[0], b * np.sin(i) + p0[1])
 
 
-def values_of_plane(i, n, r0):  # TODO correct from n[1]==0
-    if n[0] == 0:
-        return r0[1]
-    else:
-        return -n[0] * (i - r0[0]) / n[1] + r0[1]
+def plot_plane(i, n, r0):
+    x = r0[0] + n[1] * i
+    y = r0[1] - n[0] * i
+    pl.plot(x, y)
 
 
 def plot_ray(p0, e, t):
@@ -47,7 +46,7 @@ def check_plane():
         print('e_refl', e_refl)
 
         i = np.linspace(0, 10, 100)
-        pl.plot(i, values_of_plane(i, n, r0), 'g')
+        plot_plane(i, n, r0)
         plot_ray(p0, e, t)
         plot_ray(p0_refl, e_refl, t)
         plot_ray(p0_refr, e_refr, t)
@@ -107,15 +106,15 @@ if __name__ == '__main__':
     # n = [float(input('xn: ')), float(input('yn: ')), float(input('zn: '))]
 
     # Параметры вектора:
-    p0 = [2, 4]
-    e = [sqrt(2) / 2, -sqrt(2) / 2]
+    p0 = [0, 2]
+    e = [1, 0]
 
     # Параметры плоскости и сред
-    r0 = [2, 2]
+    r0 = [0, 0]
     n = [-sqrt(2) / 2, sqrt(2) / 2]
     n_r = [1, 0.8]
 
-    # check_plane()
+    check_plane()
 
     # Параметры сферы
     sph = [0, 0]
@@ -128,6 +127,6 @@ if __name__ == '__main__':
     b = 3
     el = [2, 2]
 
-    check_ellipsoid()
+    # check_ellipsoid()
 
     pl.show()
