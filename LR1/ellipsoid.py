@@ -12,8 +12,8 @@ def intersection_with_ellipsoid(r0, e, p0, a_el, b_el):
     if D < 0:
         print('Луч не пересекает эллипс')
     else:
-        t1 = (- b - sqrt(D)) / 2 * a
-        t2 = (- b + sqrt(D)) / 2 * a
+        t1 = (- b - sqrt(D)) / (2 * a)
+        t2 = (- b + sqrt(D)) / (2 * a)
         if t1 < 0:
             if t2 < 0:
                 print('Луч не пересекает эллипс')

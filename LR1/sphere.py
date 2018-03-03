@@ -7,14 +7,17 @@ def intersection_with_sphere(r0, R, p0, e):
     if temp < 0:
         print('Луч не пересекает сферу')
     else:
-        t1 = (scalar_multipl(diff(r0, p0), e)) - math.sqrt(temp)
-        t2 = (scalar_multipl(diff(r0, p0), e)) + math.sqrt(temp)
-    if t1 < 0:
-        return t2
-    elif t2 < 0:
-        return t1
-    else:
-        return min(t1, t2)
+        t1 = abs((scalar_multipl(diff(r0, p0), e))) - math.sqrt(temp)
+        t2 = abs((scalar_multipl(diff(r0, p0), e))) + math.sqrt(temp)
+        if t1 < 0:
+            if t2 < 0:
+                print('Луч не пересекает сферу')
+            else:
+                return t2
+        elif t2 < 0:
+            return t1
+        else:
+            return min(t1, t2)
 
 
 def normal(r0, e, p0, t):
