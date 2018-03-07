@@ -1,7 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as pl
-from math import *
-from LR1.calculating import *
 from LR1.plane import *
 from LR1.sphere import *
 from LR1.ellipsoid import *
@@ -20,14 +18,14 @@ def plot_ellipsoid(p0, a, b):
 def plot_plane(i, n, r0):
     x = r0[0] + n[1] * i
     y = r0[1] - n[0] * i
-    pl.plot(x, y)
+    pl.plot(x, y, label='Плоскость')
 
 
-def plot_ray(p0, e, t):
+def plot_ray(p0, e, t, name):
     j = np.linspace(0, t, 100)
     x = p0[0] + e[0] * j
     y = p0[1] + e[1] * j
-    pl.plot(x, y)
+    pl.plot(x, y, label=name)
 
 
 def check_plane():
@@ -37,19 +35,23 @@ def check_plane():
     else:
         print(t)
 
-        p0_refr = sum(p0, multipl(t, e))
-        e_refr = refraction_after_plane(n_r, e, n)
-        print('e_refr', e_refr)
-
-        p0_refl = p0_refr
+        p0_refl = sum(p0, multipl(t, e))
         e_refl = reflection_from_plane(e, n)
         print('e_refl', e_refl)
 
+        p0_refr = p0_refl
+        e_refr = refraction_after_plane(n_r, e, n)
+        print('e_refr', e_refr)
+
         i = np.linspace(0, 10, 100)
+
         plot_plane(i, n, r0)
-        plot_ray(p0, e, t)
-        plot_ray(p0_refl, e_refl, t)
-        plot_ray(p0_refr, e_refr, t)
+        plot_ray(p0, e, t, 'Исходный луч')
+        plot_ray(p0_refl, e_refl, t, 'Отражённый луч')
+        plot_ray(p0_refr, e_refr, t, 'Преломлённый луч')
+        pl.legend(loc=1)
+        pl.grid()
+        pl.show()
 
 
 def check_sphere():
@@ -70,9 +72,12 @@ def check_sphere():
         print('e_refr_s', e_refr_s)
 
         plot_sphere(sph, R)
-        plot_ray(p0, e, t_s)
-        plot_ray(p0_refl_s, e_refl_s, t_s)
-        plot_ray(p0_refr_s, e_refr_s, R)
+        plot_ray(p0, e, t_s, 'Исходный луч')
+        plot_ray(p0_refl_s, e_refl_s, t_s, 'Отражённый луч')
+        plot_ray(p0_refr_s, e_refr_s, R, 'Преломлённый луч')
+        pl.legend(loc=1)
+        pl.grid()
+        pl.show()
 
 
 def check_ellipsoid():
@@ -81,7 +86,6 @@ def check_ellipsoid():
     if t_e is None:
         print('Конец работы функции')
     else:
-        plot_ray(p0, e, t_e)
 
         p0_refl_e = sum(p0, multipl(t_e, e))
         n_e = normal(p0, e, el, t_e)
@@ -91,28 +95,28 @@ def check_ellipsoid():
         p0_refr_e = p0_refl_e
         e_refr_e = refraction_after_ellipsoid(n_r, e, n_e)
         print('e_refr_e', e_refr_e)
+
         plot_ellipsoid(el, a, b)
-        plot_ray(p0, e, t_e)
-        plot_ray(p0_refl_e, e_refl_e, t_e)
-        plot_ray(p0_refr_e, e_refr_e, t_e)
+        plot_ray(p0, e, t_e, 'Исходный луч')
+        plot_ray(p0_refl_e, e_refl_e, t_e, 'Отражённый луч')
+        plot_ray(p0_refr_e, e_refr_e, t_e, 'Преломлённый луч')
+        pl.legend(loc=1)
+        pl.grid()
+        pl.show()
 
 
 if __name__ == '__main__':
-    # print('Введите параметры луча: координаты исходной точки и вектор-направление:')
-    # p0 = [float(input('x: ')), float(input('y: ')), float(input('z: '))]
-    # e = [float(input('xe: ')), float(input('ye: ')), float(input('ze: '))]
-    # print('Введите параметры плоскости: радус вектор и вектор нормали')
-    # r0 = [float(input('x: ')), float(input('y: ')), float(input('z: '))]
-    # n = [float(input('xn: ')), float(input('yn: ')), float(input('zn: '))]
-
     # Параметры вектора:
     p0 = [0, 2]
-    e = [1, 0]
+    e = [1, -1]
+    e = norm(e)
 
     # Параметры плоскости и сред
     r0 = [0, 0]
-    n = [-sqrt(2) / 2, sqrt(2) / 2]
-    n_r = [1, 0.8]
+    n = [0, 1]
+    n = norm(n)
+    print(e, n)
+    n_r = [1, 1.2]
 
     check_plane()
 
@@ -128,5 +132,3 @@ if __name__ == '__main__':
     el = [2, 2]
 
     # check_ellipsoid()
-
-    pl.show()
