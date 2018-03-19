@@ -81,10 +81,10 @@ def integral(function, a, b):
 
 
 def my_ftt(func, a, b, N, hx, hu):
-    sumf = [0j]*N
+    sumf = [0j]*M
     for i in range(M):
         u = -b + i * hu
-        for k in range(M):
+        for k in range(N):
             r = cmath.exp(-2 * math.pi * u * (-a + k * hx)*1j)
             f_mas = func(-a + k * hx)
             sumf[i] += f_mas * r
@@ -98,7 +98,7 @@ def my_ftt(func, a, b, N, hx, hu):
 if __name__ == '__main__':
     a = 5
     N = 256
-    M = 256
+    M = 2048
     b = N * N / (4 * a * M)
     number_of_zeros = (M - N) / 2
     hx = 2 * a / N
@@ -106,6 +106,7 @@ if __name__ == '__main__':
 
     x = numpy.linspace(-a, a, N)
     x1 = numpy.linspace(-b, b, N)
+    x2 = numpy.linspace(-b, b, M)
 
     gaus_beam = gaussian_beam(x)
     """
@@ -127,7 +128,7 @@ if __name__ == '__main__':
     #pl.plot(x1, amplitude(ones_f))
     pl.plot(x, amplitude(gaus_beam), label='Исходный')
     pl.plot(x1, amplitude(gaus_beam_f), label='Фурье встр.')
-    pl.plot(x1, amplitude(gaus_beam_f2), label='Фурье моё')
+    pl.plot(x2, amplitude(gaus_beam_f2), label='Фурье моё')
 
     pl.grid()
     pl.legend()
@@ -138,7 +139,7 @@ if __name__ == '__main__':
     #pl.plot(x1, phase(ones_f))
     pl.plot(x, phase(gaus_beam), label='Исходный')
     pl.plot(x1, phase(gaus_beam_f), label='Фурье встр.')
-    pl.plot(x1, phase(gaus_beam_f2), label='Фурье моё')
+    pl.plot(x2, phase(gaus_beam_f2), label='Фурье моё')
     pl.gca().set_ylim(-math.pi, math.pi)
     pl.grid()
     pl.legend()
