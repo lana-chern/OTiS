@@ -1,6 +1,7 @@
 import math
 import cmath
 import numpy
+import scipy.fftpack
 import matplotlib.pyplot as pl
 
 
@@ -22,7 +23,6 @@ def amplitude(func):
 def phase(func):
     a = []
     for i in func:
-        #a.append(math.atan2(i.imag, i.real))
         a.append(cmath.phase(i))
     return a
 
@@ -47,10 +47,10 @@ def extract_function(func, N, number_of_zeros):
     return f_without_zeros
 
 
-def finite_fourier_transform(func, N, hx, number_of_zeros):
+def finite_fourier_transform(func, N, M, hx, number_of_zeros):
     f1 = append_zeros(func, int(number_of_zeros))
     swap_half(f1)
-    F = hx * numpy.fft.fft(f1)
+    F = hx * scipy.fft(f1, M)
     swap_half(F)
     F = extract_function(F, N, int(number_of_zeros))
     return F
@@ -82,11 +82,10 @@ def integral(function, a, b):
 
 def my_ftt(func, a, b, N, hx, hu):
     sumf = [0j]*N
-    u = numpy.zeros(N)
     for i in range(N):
-        u[i] = -b + i * hu
+        u = -b + i * hu
         for k in range(N):
-            r = cmath.exp(-2 * math.pi * u[i] * (-a + k * hx)*1j)
+            r = cmath.exp(-2 * math.pi * u * (-a + k * hx)*1j)
             f_mas = func(-a + k * hx)
             sumf[i] += f_mas * r
         sumf[i] *= hx
@@ -96,7 +95,7 @@ def my_ftt(func, a, b, N, hx, hu):
 if __name__ == '__main__':
     a = 5
     N = 256
-    M = 2048
+    M = 256
     b = N * N / (4 * a * M)
     number_of_zeros = (M - N) / 2
     hx = 2 * a / N
@@ -106,23 +105,38 @@ if __name__ == '__main__':
     x1 = numpy.linspace(-b, b, N)
 
     gaus_beam = gaussian_beam(x)
+    """
+    temp = gaus_beam[len(gaus_beam) - 1]
+    for i in reversed(range(len(gaus_beam))):
+        gaus_beam[i] = gaus_beam[i - 1]
+    gaus_beam[0] = temp
+    """
 
-    gaus_beam_f = finite_fourier_transform(gaus_beam, N, hx, number_of_zeros)
+    ones = numpy.ones(N)
+
+    #ones_f = finite_fourier_transform(ones, N, hx, number_of_zeros)
+    gaus_beam_f = finite_fourier_transform(gaus_beam, N, M, hx, number_of_zeros)
     gaus_beam_f2 = my_ftt(gaussian_beam, a, b, N, hx, hu)
 
     pl.subplot(121)
     pl.title('Ампитуда')
+    #pl.plot(x, amplitude(ones))
+    #pl.plot(x1, amplitude(ones_f))
     pl.plot(x, amplitude(gaus_beam), label='Исходный')
     pl.plot(x1, amplitude(gaus_beam_f), label='Фурье встр.')
-    #pl.plot(x1, amplitude(gaus_beam_f2), label='Фурье моё')
+    pl.plot(x1, amplitude(gaus_beam_f2), label='Фурье моё')
+
     pl.grid()
     pl.legend()
 
     pl.subplot(122)
     pl.title('Фаза')
+    #pl.plot(x, phase(ones))
+    #pl.plot(x1, phase(ones_f))
     pl.plot(x, phase(gaus_beam), label='Исходный')
     pl.plot(x1, phase(gaus_beam_f), label='Фурье встр.')
-    #pl.plot(x1, phase(gaus_beam_f2), label='Фурье моё')
+    pl.plot(x1, phase(gaus_beam_f2), label='Фурье моё')
+    pl.gca().set_ylim(-math.pi, math.pi)
     pl.grid()
     pl.legend()
 
