@@ -82,13 +82,16 @@ def integral(function, a, b):
 
 def my_ftt(func, a, b, N, hx, hu):
     sumf = [0j]*N
-    for i in range(N):
+    for i in range(M):
         u = -b + i * hu
-        for k in range(N):
+        for k in range(M):
             r = cmath.exp(-2 * math.pi * u * (-a + k * hx)*1j)
             f_mas = func(-a + k * hx)
             sumf[i] += f_mas * r
         sumf[i] *= hx
+    sumf2 = []
+    for i in range(N):
+        sumf2.append(sumf[i])
     return sumf
 
 
