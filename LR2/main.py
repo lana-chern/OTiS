@@ -85,15 +85,15 @@ if __name__ == '__main__':
     x2 = numpy.linspace(-b, b, M)
     x3 = numpy.linspace(-a, a, M)
 
-    # gaus_beam = gaussian_beam(x)
-    # gaus_beam_f = finite_fourier_transform(gaus_beam, N, M, hx, number_of_zeros)
-    # gaus_beam_f2 = my_ftt(gaussian_beam, a, b, N, hx, hu)
+    gaus_beam = gaussian_beam(x)
+    gaus_beam_f = finite_fourier_transform(gaus_beam, N, M, hx, number_of_zeros)
+    gaus_beam_f2 = my_ftt(gaussian_beam, a, b, N, hx, hu)
 
-    my_beam = f(x)
-    my_beam_f = finite_fourier_transform(my_beam, N, M, hx, number_of_zeros)
-    my_beam_f2 = my_ftt(f, a, b, N, hx, hu)
+    #my_beam = f(x)
+    #my_beam_f = finite_fourier_transform(my_beam, N, M, hx, number_of_zeros)
+    #my_beam_f2 = my_ftt(f, a, b, N, hx, hu)
 
-    """
+
     pl.subplot(131)
     pl.plot(x, gaussian_beam(x))
     pl.title("Пучок Гаусса")
@@ -115,8 +115,9 @@ if __name__ == '__main__':
     pl.gca().set_ylim(-math.pi, math.pi)
     pl.grid()
     pl.legend()
-    """
 
+
+    """
     pl.subplot(131)
     pl.plot(x, f(x))
     pl.title("Исходный пучок")
@@ -140,5 +141,6 @@ if __name__ == '__main__':
     # pl.gca().set_ylim(-math.pi, math.pi)
     pl.grid()
     pl.legend()
+    """
 
     pl.show()
