@@ -77,7 +77,7 @@ def finite_fourier_transform(func, N, M, hx, number_of_zeros):
     return F
 
 
-def my_fft(func, N, M, hx, number_of_zeros):
+def my_fft(func, x, y, N, M, hx, number_of_zeros):
     beam = [0j] * N
     for i in range(N):
         beam[i] = [0j] * N
@@ -101,11 +101,43 @@ def my_fft(func, N, M, hx, number_of_zeros):
     return [beam, beam_f]
 
 
-def slice_polar(x, y, f, a):
+def f_polar(r, phi):
+    return numpy.exp(-r * r) * r * r * (
+                20 - 60 * r * r + 30 * numpy.power(r, 4) - 10 * numpy.power(r, 6) / 3) * numpy.exp(
+        -2 * 1j * phi)
+
+
+def slice_polar(f, x, y, a):
     for i in range(len(x)):
         for j in range(len(y)):
             if numpy.power(x[i], 2) + numpy.power(y[i], 2) > numpy.power(a, 2):
                 f[i][j] = 0
+
+
+def my_fft_polar(func, x, y, r, phi, a, N, M, hx, number_of_zeros):
+    beam = [0j] * N
+    for i in range(N):
+        beam[i] = [0j] * N
+
+    for i in range(N):
+        for j in range(N):
+            beam[i][j] = func(r[i], phi[j]) + 0j
+
+    slice_polar(beam, x, y, a)
+
+    beam_f = []
+    for i in range(N):
+        beam_f.append(finite_fourier_transform(beam[i], N, M, hx, number_of_zeros))
+
+    temp = [1j] * N
+    for i in range(N):
+        for j in range(N):
+            temp[j] = beam_f[j][i]
+        temp = finite_fourier_transform(temp, N, M, hx, number_of_zeros)
+        for j in range(N):
+            beam_f[j][i] = temp[j]
+
+    return [beam, beam_f]
 
 
 if __name__ == '__main__':
@@ -122,18 +154,24 @@ if __name__ == '__main__':
     x1 = numpy.linspace(-b, b, N)
     y1 = numpy.linspace(-b, b, N)
 
-    result = my_fft(f, N, M, hx, number_of_zeros)
+    r = numpy.sqrt(numpy.power(x, 2) + numpy.power(y, 2))
+    phi = numpy.arctan2(y, x)
+
+    result = my_fft(f, x, y, N, M, hx, number_of_zeros)
     my_beam = result[0]
     my_beam_f = result[1]
+
+    result_r = my_fft_polar(f_polar, x, y, r, phi, a, N, M, hx, number_of_zeros)
+    my_beam_polar = result_r[0]
+    my_beam_polar_f = result_r[1]
 
     fig = pl.figure()
     ax = fig.gca(projection='3d')
 
     x, y = numpy.meshgrid(x, y)
     x1, y1 = numpy.meshgrid(x1, y1)
-    # phi = numpy.arctan2(y, x)
 
-    z = my_beam
+    z = my_beam_polar
     z_abs = amplitude2(z)
     z_phase = phase2(z)
 
@@ -149,7 +187,7 @@ if __name__ == '__main__':
     pl.pcolor(x, y, z_phase, cmap='Spectral', vmin=z_min, vmax=z_max)
     pl.axis([x.min(), x.max(), y.min(), y.max()])
 
-    z = my_beam_f
+    z = my_beam_polar_f
     z_abs = amplitude2(z)
     z_phase = phase2(z)
 
