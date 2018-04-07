@@ -121,7 +121,7 @@ def my_fft_polar(func, x, y, r, phi, a, N, M, hx, number_of_zeros):
 
     for i in range(N):
         for j in range(N):
-            beam[i][j] = func(r[i], phi[j]) + 0j
+            beam[i][j] = func(numpy.sqrt(x[i]*x[i]+y[j]*y[j]), numpy.arctan2(y[j], x[i])) + 0j
 
     slice_polar(beam, x, y, a)
 
@@ -143,7 +143,7 @@ def my_fft_polar(func, x, y, r, phi, a, N, M, hx, number_of_zeros):
 if __name__ == '__main__':
     a = 5
     N = 256
-    M = 1024
+    M = 2048
     b = N * N / (4 * a * M)
     number_of_zeros = (M - N) / 2
     hx = 2 * a / N
@@ -203,5 +203,5 @@ if __name__ == '__main__':
     pl.pcolor(x1, y1, z_phase, cmap='Spectral', vmin=z_min, vmax=z_max)
     pl.axis([x1.min(), x1.max(), y1.min(), y1.max()])
 
-    # pl.colorbar()
+    pl.colorbar()
     pl.show()
